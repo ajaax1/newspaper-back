@@ -22,8 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('users', UserController::class);
 
-// Rotas para notícias (news)
 Route::apiResource('news', NewsController::class);
 
-// Rotas para categorias
 Route::apiResource('categories', CategoryController::class);
+
