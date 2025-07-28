@@ -18,4 +18,15 @@ class BannerController extends Controller
         return response()->json($banners);
     }
 
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $banner = $this->bannersService->create($data);
+        return response()->json($banner, 201);
+    }
+
 }
