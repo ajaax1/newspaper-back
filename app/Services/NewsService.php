@@ -43,6 +43,15 @@ class NewsService
         ]);
     }
 
+    public function getAllPanel()
+    {
+        $news = News::with(['user', 'categories'])
+            ->orderByDesc('created_at')
+            ->paginate(10); // 10 itens por página
+
+        return response()->json($news);
+    }
+
 
     public function create(array $data)
     {

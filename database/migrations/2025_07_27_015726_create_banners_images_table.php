@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('news', function (Blueprint $table) {
+        Schema::create('banner_images', function (Blueprint $table) {
             $table->id();
+            $table->string('image_url')->nullable();
+            $table->foreignId('banner_id')
+                ->constrained('banners')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('news');
+        Schema::dropIfExists('banners_images');
     }
 };

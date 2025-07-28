@@ -21,6 +21,11 @@ class NewsController extends Controller
         return $this->newsService->getAll();
     }
 
+    public function panel()
+    {
+        return $this->newsService->getAllPanel();
+    }
+
     public function store(StoreNewsRequest $request)
     {
         $validated = $request->validated();
