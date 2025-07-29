@@ -37,9 +37,11 @@ Route::middleware('auth:api')->group(function () {
     Route::put('categories/{id}', [CategoryController::class, 'update']);
     Route::delete('categories/{id}', [CategoryController::class, 'destroy']);
     Route::post('categories', [CategoryController::class, 'store']);
+    Route::get('admin/categories', [CategoryController::class, 'panel']);
+
 });
 
+Route::get('categories', [CategoryController::class, 'index']);
 Route::get('news', [NewsController::class, 'index']);
 Route::get('news/{id}', [NewsController::class, 'show']);
-Route::get('categories', [CategoryController::class, 'index']);
 Route::get('categories/{id}', [CategoryController::class, 'show']);

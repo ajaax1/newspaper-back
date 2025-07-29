@@ -1,14 +1,27 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Services\CategoryService;
 
 class CategoryController extends Controller
 {
+    protected $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
     public function index()
     {
-        return Category::all();
+        return $this->categoryService->getAll();
+    }
+    public function panel()
+    {
+        return $this->categoryService->getAllPanel();
     }
 
     public function store(Request $request)
@@ -16,13 +29,13 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
         ]);
-        $category = Category::create($validated);
+        $category = $this->categoryService->create($validated);
         return response()->json($category, 201);
     }
 
     public function show(Category $category)
     {
-        return $category;
+        return response()->json($category);
     }
 
     public function update(Request $request, Category $category)
@@ -31,7 +44,7 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $category->update($validated);
+        $category = $this->categoryService->update($category, $validated);
         return response()->json($category);
     }
 

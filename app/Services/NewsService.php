@@ -79,7 +79,7 @@ class NewsService
                 $news->categories()->sync($data['category_ids']);
             }
 
-            return $news->load('categories');
+            return response()->json($news->toArray());
         });
     }
 

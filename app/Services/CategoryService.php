@@ -1,10 +1,16 @@
 <?php
 
 namespace App\Services;
+
 use App\Models\Category;
 
 class CategoryService
 {
+    public function getAllPanel()
+    {
+        return Category::paginate(10);
+    }
+
     public function getAll()
     {
         return Category::all();
