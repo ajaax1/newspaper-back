@@ -2,48 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-        if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'Credenciais inválidas'], 401);
         }
 
+        $token = $user->createToken('token-pessoal')->plainTextToken;
 
         return response()->json([
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60, // padrão: 60min
+            'token_type' => 'Bearer',
         ]);
     }
 
-
-    public function me()
+    public function me(Request $request)
     {
-        return response()->json(auth()->user());
+        return response()->json($request->user());
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        auth()->logout();
-        return response()->json(['message' => 'Desconectado com sucesso']);
-    }
+        $request->user()->currentAccessToken()->delete();
 
-    public function refresh()
-    {
-        $newToken = JWTAuth::refresh(JWTAuth::getToken());
-        return response()->json([
-            'access_token' => $newToken,
-            'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60
-        ]);
+        return response()->json(['message' => 'Logout efetuado com sucesso']);
     }
 }

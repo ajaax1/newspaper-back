@@ -42,7 +42,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'sanctum', // ou 'token' se estiver usando token simples
+            'driver' => 'sanctum',
             'provider' => 'users',
         ],
     ],

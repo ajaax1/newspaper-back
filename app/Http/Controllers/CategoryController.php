@@ -38,13 +38,17 @@ class CategoryController extends Controller
         $category = $this->categoryService->find($id);
         return response()->json($category);
     }
-    public function update(Request $request, Category $category)
+
+    public function update(Request $request, int $id)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
+        $category = Category::findOrFail($id); // busca a categoria ou lança 404
+
         $category = $this->categoryService->update($category, $validated);
+
         return response()->json($category);
     }
 
@@ -57,4 +61,6 @@ class CategoryController extends Controller
         $this->categoryService->delete($category);
         return response()->json(null, 204);
     }
+
+
 }
