@@ -48,9 +48,13 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
-    public function destroy(Category $category)
+    public function destroy(int $id)
     {
-        $category->delete();
+        $category = $this->categoryService->find($id);
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+        $this->categoryService->delete($category);
         return response()->json(null, 204);
     }
 }

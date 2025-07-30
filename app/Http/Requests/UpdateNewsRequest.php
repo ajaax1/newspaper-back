@@ -37,7 +37,6 @@ class UpdateNewsRequest extends FormRequest
             'content' => 'sometimes|string',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'badge' => 'nullable|string|max:30',
-            'user_id' => 'sometimes|exists:users,id',
             'top_position' => 'nullable|in:main_top,top_1,top_2,top_3',
             'status' => 'sometimes|in:draft,published',
             'category_ids' => 'nullable|array',

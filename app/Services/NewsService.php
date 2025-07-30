@@ -71,6 +71,7 @@ class NewsService
     public function create(array $data)
     {
         return DB::transaction(function () use ($data) {
+            $data['user_id'] = auth()->id();
             $news = News::create($data);
 
             if (!empty($data['category_ids'])) {
@@ -89,6 +90,7 @@ class NewsService
     public function update(News $news, array $data)
     {
         return DB::transaction(function () use ($news, $data) {
+            $data['user_id'] = auth()->id();
             $news->update($data);
             if (isset($data['category_ids'])) {
                 $news->categories()->sync($data['category_ids']);
