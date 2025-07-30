@@ -42,9 +42,9 @@ return [
         ],
 
         'api' => [
-        'driver' => 'jwt',
-        'provider' => 'users',
-    ],
+            'driver' => 'sanctum', // ou 'token' se estiver usando token simples
+            'provider' => 'users',
+        ],
     ],
 
     /*
