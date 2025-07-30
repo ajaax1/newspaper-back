@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\News;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use function Laravel\Prompts\search;
 
 class NewsService
 {
@@ -43,11 +44,25 @@ class NewsService
         ]);
     }
 
-    public function getAllPanel()
+    public function getAllPanel($search, $category)
     {
-        $news = News::with(['user', 'categories'])
-            ->orderByDesc('created_at')
-            ->paginate(10); // 10 itens por página
+        $query = News::with(['user', 'categories'])
+            ->orderByDesc('created_at');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('sub_title', 'like', "%{$search}%");
+            });
+        }
+
+        if ($category) {
+            $query->whereHas('categories', function ($q) use ($category) {
+                $q->where('name', $category);
+            });
+        }
+
+        $news = $query->paginate(10); // 10 itens por página
 
         return response()->json($news);
     }

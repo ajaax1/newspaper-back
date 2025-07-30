@@ -33,11 +33,11 @@ class CategoryController extends Controller
         return response()->json($category, 201);
     }
 
-    public function show(Category $category)
+    public function show(int $id)
     {
+        $category = $this->categoryService->find($id);
         return response()->json($category);
     }
-
     public function update(Request $request, Category $category)
     {
         $validated = $request->validate([

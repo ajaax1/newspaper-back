@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\NewsService;
 use App\Http\Requests\StoreNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
+
 class NewsController extends Controller
 {
     protected $newsService;
@@ -21,9 +22,11 @@ class NewsController extends Controller
         return $this->newsService->getAll();
     }
 
-    public function panel()
+    public function panel($search, $category)
     {
-        return $this->newsService->getAllPanel();
+        if ($search === 'null') $search = null;
+        if ($category === 'null') $category = null;
+        return $this->newsService->getAllPanel($search, $category);
     }
 
     public function store(StoreNewsRequest $request)
@@ -46,8 +49,13 @@ class NewsController extends Controller
         return response()->json($news);
     }
 
-    public function destroy(News $news)
+    public function destroy(int $id)
     {
+        $news = $this->newsService->find($id);
+        if (!$news) {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+
         $this->newsService->delete($news);
         return response()->json(null, 204);
     }

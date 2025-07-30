@@ -32,13 +32,14 @@ Route::middleware('auth:api')->group(function () {
     Route::post('news', [NewsController::class, 'store']);
     Route::put('news/{id}', [NewsController::class, 'update']);
     Route::delete('news/{id}', [NewsController::class, 'destroy']);
-    Route::get('admin/news/', [NewsController::class, 'panel']);
+    Route::get('admin/news/{search?}/{category?}', [NewsController::class, 'panel']);
+    Route::get('news', [NewsController::class, 'index']);
 
     Route::put('categories/{id}', [CategoryController::class, 'update']);
     Route::delete('categories/{id}', [CategoryController::class, 'destroy']);
+    Route::get('categories/{id}', [CategoryController::class, 'show']);
     Route::post('categories', [CategoryController::class, 'store']);
     Route::get('admin/categories', [CategoryController::class, 'panel']);
-
 });
 
 Route::get('categories', [CategoryController::class, 'index']);
