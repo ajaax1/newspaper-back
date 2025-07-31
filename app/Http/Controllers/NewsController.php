@@ -39,24 +39,24 @@ class NewsController extends Controller
     public function show($id)
     {
         $news = $this->newsService->find($id);
-        return response()->json($news);
+        return $news;
     }
 
-    public function update(UpdateNewsRequest $request, News $news)
+    public function update(UpdateNewsRequest $request, int $id)
     {
         $validated = $request->validated();
-        $news = $this->newsService->update($news, $validated);
-        return response()->json($news);
+
+        $news = $this->newsService->update($id, $validated);
+        return response()->json(['message' => 'Notícia atualizada com sucesso.'], 200);
     }
 
     public function destroy(int $id)
     {
-        $news = $this->newsService->find($id);
+        $news = News::find($id);
         if (!$news) {
-            return response()->json(['message' => 'Not Found'], 404);
+            return response()->json(['message' => 'Notícia não encontrada'], 404);
         }
 
-        $this->newsService->delete($news);
-        return response()->json(null, 204);
+        return $this->newsService->delete($news);
     }
 }

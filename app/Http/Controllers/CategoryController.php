@@ -28,6 +28,11 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+        ],
+        [
+            'name.required' => 'O campo nome é obrigatório.',
+            'name.string' => 'O campo nome deve ser uma string.',
+            'name.max' => 'O campo nome não pode ter mais de 255 caracteres.',
         ]);
         $category = $this->categoryService->create($validated);
         return response()->json($category, 201);
@@ -36,7 +41,7 @@ class CategoryController extends Controller
     public function show(int $id)
     {
         $category = $this->categoryService->find($id);
-        return response()->json($category);
+        return $category;
     }
 
     public function update(Request $request, int $id)
@@ -45,22 +50,21 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $category = Category::findOrFail($id); // busca a categoria ou lança 404
+        try {
+            $category = Category::findOrFail($id);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Categoria não encontrada.'], 404);
+        }
 
-        $category = $this->categoryService->update($category, $validated);
-
-        return response()->json($category);
+        return $category = $this->categoryService->update($category, $validated);
     }
 
     public function destroy(int $id)
     {
-        $category = $this->categoryService->find($id);
+        $category = Category::find($id);
         if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);
+            return response()->json(['message' => 'Categoria não encontrada.'], 404);
         }
-        $this->categoryService->delete($category);
-        return response()->json(null, 204);
+        return $this->categoryService->delete($category);
     }
-
-
 }
