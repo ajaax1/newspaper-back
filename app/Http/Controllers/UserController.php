@@ -19,10 +19,10 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function index(Request $request)
+    public function index($search)
     {
-        $perPage = $request->input('per_page', 10);
-        return $this->userService->getAll($perPage);
+        if ($search === 'null') $search = null;
+        return $this->userService->getAll($search);
     }
 
     public function store(StoreUserRequest $request)
@@ -34,9 +34,10 @@ class UserController extends Controller
         return response()->json($user, 201);
     }
 
-    public function show(User $user)
+    public function show(int $id)
     {
-        return $user;
+        $category = $this->userService->find($id);
+        return $category;
     }
 
     public function update(UpdateUserRequest $request, User $user)

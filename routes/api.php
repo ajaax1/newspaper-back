@@ -23,7 +23,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
 
-    Route::get('users', [UserController::class, 'index']);
+    Route::get('users/{search?}', [UserController::class, 'index']);
     Route::post('users', [UserController::class, 'store']);
     Route::get('users/{id}', [UserController::class, 'show']);
     Route::put('users/{id}', [UserController::class, 'update']);
@@ -42,7 +42,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('admin/categories', [CategoryController::class, 'panel']);
 });
 
-Route::get('categories', [CategoryController::class, 'index']);
 Route::get('news', [NewsController::class, 'index']);
 Route::get('news/{id}', [NewsController::class, 'show']);
+Route::get('news-category/{categoryId}/{search?}',[NewsController::class,'newsCategory']);
+
 Route::get('categories/{id}', [CategoryController::class, 'show']);
+Route::get('categories', [CategoryController::class, 'index']);

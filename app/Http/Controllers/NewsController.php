@@ -59,4 +59,12 @@ class NewsController extends Controller
 
         return $this->newsService->delete($news);
     }
+
+    public function newsCategory($categoryId,$search){
+        if($search == 'null'){
+            $search = null;
+        }
+        $news = $this->newsService->newsCategory($categoryId,$search);
+        return $news;
+    }
 }

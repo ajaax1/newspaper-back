@@ -7,10 +7,19 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    public function getAll(int $perPage = 10)
+    public function getAll($search)
     {
+        $perPage = 10;
+
+        if ($search) {
+            return User::where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->paginate($perPage);
+        }
+
         return User::paginate($perPage);
     }
+
 
     public function create(array $data)
     {
@@ -20,7 +29,11 @@ class UserService
 
     public function find(int $id)
     {
-        return User::findOrFail($id);
+        try {
+            return User::findOrFail($id);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'Usuário não encontrada.'], 404);
+        }
     }
 
     public function update(User $user, array $data)

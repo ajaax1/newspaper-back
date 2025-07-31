@@ -6,6 +6,7 @@ use App\Models\News;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use function Laravel\Prompts\search;
+use Illuminate\Support\Str;
 
 class NewsService
 {
@@ -68,11 +69,24 @@ class NewsService
     }
 
 
+
     public function create(array $data)
     {
         try {
             return DB::transaction(function () use ($data) {
+                $slug = Str::slug($data['title']);
+
+                $count = 0;
+                $baseSlug = $slug;
+
+                while (News::where('slug', $slug)->exists()) {
+                    $count++;
+                    $slug = $baseSlug . '-' . $count;
+                }
+
+                $data['slug'] = $slug;
                 $data['user_id'] = auth()->id();
+
                 $news = News::create($data);
 
                 if (!empty($data['category_ids'])) {
@@ -85,6 +99,7 @@ class NewsService
             return response()->json(['message' => 'Erro ao criar notícia'], 500);
         }
     }
+
 
     public function find(int $id)
     {
@@ -129,6 +144,31 @@ class NewsService
             return response()->json(['message' => 'Notícia deletada com sucesso.'], 200);
         } else {
             return response()->json(['message' => 'Falha ao deletar notícia.'], 400);
+        }
+    }
+
+    public function newsCategory($categoryId, $search = null)
+    {
+        try {
+            $perPage = 10;
+
+            $news = News::with(['user', 'categories'])
+                ->whereHas('categories', function ($query) use ($categoryId) {
+                    $query->where('categories.id', $categoryId);
+                })
+                ->when($search, function ($query) use ($search) {
+                    $query->where('title', 'like', '%' . $search . '%');
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate($perPage);
+
+            if ($news->isEmpty()) {
+                return response()->json(['message' => 'Nenhuma notícia encontrada'], 404);
+            }
+
+            return response()->json($news);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao buscar notícias.'], 500);
         }
     }
 }
