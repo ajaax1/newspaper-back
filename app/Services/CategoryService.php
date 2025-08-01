@@ -9,18 +9,12 @@ class CategoryService
     public function getAllPanel()
     {
         $categories = Category::paginate(10);
-        if ($categories->isEmpty()) {
-            return response()->json(['message' => 'No categories found'], 404);
-        }
         return $categories;
     }
 
     public function getAll()
     {
         $categories = Category::all();
-        if ($categories->isEmpty()) {
-            return response()->json(['message' => 'No categories found'], 404);
-        }
         return $categories;
     }
 
@@ -35,11 +29,7 @@ class CategoryService
 
     public function find(int $id)
     {
-        try {
-            return Category::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['message' => 'Categoria não encontrada.'], 404);
-        }
+        return Category::find($id);
     }
 
     public function update(Category $category, array $data)

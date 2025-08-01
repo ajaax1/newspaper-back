@@ -162,10 +162,6 @@ class NewsService
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
 
-            if ($news->isEmpty()) {
-                return response()->json(['message' => 'Nenhuma notícia encontrada'], 404);
-            }
-
             return response()->json($news);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Erro ao buscar notícias.'], 500);

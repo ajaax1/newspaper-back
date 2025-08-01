@@ -49,21 +49,19 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
         ]);
-
-        try {
-            $category = Category::findOrFail($id);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Categoria não encontrada.'], 404);
+        $category = Category::find($id);
+        if (!$category) {
+            return response()->json(['message' => 'Categoria não encontrada'], 200);
         }
-
         return $category = $this->categoryService->update($category, $validated);
+
     }
 
     public function destroy(int $id)
     {
         $category = Category::find($id);
         if (!$category) {
-            return response()->json(['message' => 'Categoria não encontrada.'], 404);
+            return response()->json(['message' => 'Categoria não encontrada.'], 200);
         }
         return $this->categoryService->delete($category);
     }
