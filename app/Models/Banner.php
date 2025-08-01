@@ -12,6 +12,7 @@ class Banner extends Model
 
     protected $fillable = [
         'name',
+        'category_id'
     ];
 
     public function bannerImages()
