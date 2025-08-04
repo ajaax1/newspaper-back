@@ -22,6 +22,20 @@ class BannerController extends Controller
         $banners = $this->bannersService->getAll();
         return response()->json($banners);
     }
+    public function getTopAndSideImages()
+    {
+        $banners = Banner::with('bannerImages')
+            ->whereIn('id', [1, 2])
+            ->get();
+
+        // Reduzir o resultado para apenas image_url agrupadas por banner ID
+        $result = $banners->mapWithKeys(function ($banner) {
+            $imageUrls = $banner->bannerImages->map(fn($img) => $img->image_url)->filter()->values();
+            return [$banner->name => $imageUrls];
+        });
+
+        return response()->json($result);
+    }
 
     public function store(Request $request)
     {

@@ -26,4 +26,9 @@ class Category extends Model
     {
         return $this->belongsToMany(News::class, 'categories_news');
     }
+
+    public function banners()
+    {
+        return $this->hasMany(Banner::class);
+    }
 }

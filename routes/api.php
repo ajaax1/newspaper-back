@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('categories', [CategoryController::class, 'store']);
     Route::get('admin/categories', [CategoryController::class, 'panel']);
 
+    Route::get('banners', [BannerController::class, 'index']);
     Route::post('banners',[BannerController::class,'store']);
     Route::delete('banners/{id}',[BannerController::class,'destroy']);
 });
@@ -50,6 +51,8 @@ Route::get('news', [NewsController::class, 'index']);
 Route::get('news/{id}', [NewsController::class, 'show']);
 Route::get('news-category/{categoryId}/{search?}',[NewsController::class,'newsCategory']);
 
-
 Route::get('categories/{id}', [CategoryController::class, 'show']);
 Route::get('categories', [CategoryController::class, 'index']);
+
+Route::get('/banners/top-e-side', [BannerController::class, 'getTopAndSideImages']);
+

@@ -31,19 +31,40 @@ class NewsService
 
         $idsPrincipais = $principais->pluck('id')->toArray();
 
-        $editorias = Category::with(['news' => function ($query) use ($idsPrincipais) {
-            $query->where('status', 'published')
-                ->whereNotIn('news.id', $idsPrincipais) // <-- aqui está o ajuste
-                ->orderByDesc('created_at')
-                ->take(4);
-        }])->get();
+        $editorias = Category::with([
+            'news' => function ($query) use ($idsPrincipais) {
+                $query->where('status', 'published')
+                    ->whereNotIn('news.id', $idsPrincipais)
+                    ->orderByDesc('created_at')
+                    ->take(4);
+            },
+            'banners.bannerImages'
+        ])->get();
 
+        // Construir JSON final substituindo os banners por array de image_url
+        $editorias = $editorias->map(function ($categoria) {
+            $data = $categoria->toArray(); // transformar em array
+            $bannerImages = [];
+
+            foreach ($categoria->banners as $banner) {
+                foreach ($banner->bannerImages as $image) {
+                    if ($image->image_url) {
+                        $bannerImages[] = $image->image_url;
+                    }
+                }
+            }
+
+            $data['banners'] = $bannerImages; // sobrescreve com array de URLs
+            return $data;
+        });
 
         return response()->json([
             'principais' => $principais,
             'editorias' => $editorias,
         ]);
     }
+
+
 
     public function getAllPanel($search, $category)
     {
