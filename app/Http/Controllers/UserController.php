@@ -40,18 +40,23 @@ class UserController extends Controller
         return $category;
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, int $id)
     {
         $validated = $request->validated();
+
+        $user = User::find($id);
+        if(!$user){
+            return response()->json(['message'=>'Usuário não encontrado'],200);
+        }
 
         $user = $this->userService->update($user, $validated);
 
         return response()->json($user);
     }
 
-    public function destroy(User $user)
+    public function destroy(int $id)
     {
-        $this->userService->delete($user);
+        $this->userService->delete($id);
         return response()->json(null, 204);
     }
 }

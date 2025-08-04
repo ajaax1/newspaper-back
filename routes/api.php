@@ -24,27 +24,27 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
 
-    Route::get('users/{search?}', [UserController::class, 'index']);
-    Route::post('users', [UserController::class, 'store']);
-    Route::get('users/{id}', [UserController::class, 'show']);
-    Route::put('users/{id}', [UserController::class, 'update']);
-    Route::delete('users/{id}', [UserController::class, 'destroy']);
+    Route::get('admin/users/{search?}', [UserController::class, 'index']);
+    Route::post('admin/users', [UserController::class, 'store']);
+    Route::get('admin/user/{id}', [UserController::class, 'show']);
+    Route::put('admin/users/{id}', [UserController::class, 'update']);
+    Route::delete('admin/users/{id}', [UserController::class, 'destroy']);
 
-    Route::post('news', [NewsController::class, 'store']);
-    Route::put('news/{id}', [NewsController::class, 'update']);
-    Route::delete('news/{id}', [NewsController::class, 'destroy']);
-    Route::get('admin/news/{search?}/{category?}', [NewsController::class, 'panel']);
-    Route::get('news', [NewsController::class, 'index']);
+    Route::post('admin/news', [NewsController::class, 'store']);
+    Route::put('admin/news/{id}', [NewsController::class, 'update']);
+    Route::delete('admin/news/{id}', [NewsController::class, 'destroy']);
+    Route::get('admin/admin/news/{search?}/{category?}', [NewsController::class, 'panel']);
+    Route::get('admin/news', [NewsController::class, 'index']);
 
-    Route::put('categories/{id}', [CategoryController::class, 'update']);
-    Route::delete('categories/{id}', [CategoryController::class, 'destroy']);
-    Route::get('categories/{id}', [CategoryController::class, 'show']);
-    Route::post('categories', [CategoryController::class, 'store']);
+    Route::put('admin/categories/{id}', [CategoryController::class, 'update']);
+    Route::delete('admin/categories/{id}', [CategoryController::class, 'destroy']);
+    Route::get('admin/categories/{id}', [CategoryController::class, 'show']);
+    Route::post('admin/categories', [CategoryController::class, 'store']);
     Route::get('admin/categories', [CategoryController::class, 'panel']);
 
-    Route::get('banners', [BannerController::class, 'index']);
-    Route::post('banners',[BannerController::class,'store']);
-    Route::delete('banners/{id}',[BannerController::class,'destroy']);
+    Route::get('admin/banners', [BannerController::class, 'index']);
+    Route::post('admin/banners',[BannerController::class,'store']);
+    Route::delete('admin/banners/{id}',[BannerController::class,'destroy']);
 });
 
 Route::get('news', [NewsController::class, 'index']);

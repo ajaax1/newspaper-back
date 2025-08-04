@@ -29,11 +29,7 @@ class UserService
 
     public function find(int $id)
     {
-        try {
-            return User::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['message' => 'Usuário não encontrada.'], 404);
-        }
+        return User::find($id);
     }
 
     public function update(User $user, array $data)
@@ -42,11 +38,18 @@ class UserService
             $data['password'] = Hash::make($data['password']);
         }
         $user->update($data);
-        return $user;
+        return response()->json(['message'=>'Atualizado com Sucesso'],200);
     }
 
-    public function delete(User $user)
+    public function delete(int $id)
     {
-        return $user->delete();
+        $user = User::find($id);
+
+        if(!$user){
+            return response()->json(['message' => 'User não encontrada.'], 200);
+        }
+        $user->delete();
+
+        return response()->json(['message' => 'Usuário deletado com sucesso!'], 200);
     }
 }
