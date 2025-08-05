@@ -10,10 +10,10 @@ return new class extends Migration {
         Schema::create('business_columns', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('image_url')->nullable();
-            $table->string('endereco');
-            $table->string('numero');
-            $table->text('descricao')->nullable();
+            $table->string('image_url');
+            $table->string('address')->nullable();; // translated from 'endereco'
+            $table->string('number')->nullable();;  // can be street/building number
+            $table->text('description')->nullable(); // translated from 'descricao'
             $table->timestamps();
         });
     }
