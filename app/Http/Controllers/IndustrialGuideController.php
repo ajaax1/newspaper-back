@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BusinessColumn;
 use Illuminate\Http\Request;
-use App\Services\BusinessColumnService;
+use App\Services\IndustrialGuideService;
+use App\Models\IndustrialGuide;
 
-class BusinessColumnController extends Controller
+class IndustrialGuideController extends Controller
 {
     protected $service;
 
-    public function __construct(BusinessColumnService $service)
+    public function __construct(IndustrialGuideService $service)
     {
         $this->service = $service;
     }
 
     public function index($search)
     {
-        if($search == 'null'){
+        if ($search === 'null') {
             $search = null;
         }
+
         return response()->json($this->service->getAll($search));
     }
 
@@ -46,51 +47,54 @@ class BusinessColumnController extends Controller
             'description.string' => 'A descrição deve ser um texto.',
         ]);
 
-
-        $newColumn = $this->service->create($data);
-        return response()->json($newColumn, 201);
+        $newGuide = $this->service->create($data);
+        return response()->json($newGuide, 201);
     }
 
     public function show($id)
     {
-        $column = $this->service->findById($id);
+        $guide = $this->service->findById($id);
 
-        if (!$column) {
+        if (!$guide) {
             return response()->json([], 200);
         }
 
-        return response()->json($column);
+        return response()->json($guide);
     }
 
     public function update(Request $request, $id)
     {
-        $column = $this->service->findById($id);
+        $guide = $this->service->findById($id);
 
-        if (!$column) {
+        if (!$guide) {
             return response()->json(['message' => 'Not Found'], 404);
         }
 
         $data = $request->validate([
             'name' => 'sometimes|string|max:255',
-            'image_url' => 'nullable|string',
+            'image_url' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
             'address' => 'sometimes|string',
             'number' => 'sometimes|string',
             'description' => 'nullable|string',
         ]);
 
-        $updated = $this->service->update($column, $data);
+        if ($request->hasFile('image_url')) {
+            $data['image_url'] = $request->file('image_url')->store('industrial-guides', 'public');
+        }
+
+        $this->service->update($guide, $data);
         return response()->json(['message' => 'Atualizado com sucesso']);
     }
 
     public function destroy($id)
     {
-        $column = $this->service->findById($id);
+        $guide = $this->service->findById($id);
 
-        if (!$column) {
+        if (!$guide) {
             return response()->json(['message' => 'Not Found'], 404);
         }
 
-        $this->service->delete($column);
+        $this->service->delete($guide);
         return response()->json(['message' => 'Deletado com sucesso']);
     }
 }

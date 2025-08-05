@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BusinessColumnController;
+use App\Http\Controllers\IndustrialGuideController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -46,11 +46,10 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('banners', [BannerController::class, 'store']);
     Route::delete('banners/{id}', [BannerController::class, 'destroy']);
 
-    Route::post('business-columns', [BusinessColumnController::class, 'store']);
-    Route::put('business-columns/{id}', [BusinessColumnController::class, 'update']);
-    Route::delete('business-columns/{id}', [BusinessColumnController::class, 'destroy']);
+    Route::post('industrial-guide', [IndustrialGuideController::class, 'store']);
+    Route::put('industrial-guide/{id}', [IndustrialGuideController::class, 'update']);
+    Route::delete('industrial-guide/{id}', [IndustrialGuideController::class, 'destroy']);
 });
-
 
 Route::get('news', [NewsController::class, 'index']);
 Route::get('news/{id}', [NewsController::class, 'show']);
@@ -61,6 +60,6 @@ Route::get('categories', [CategoryController::class, 'index']);
 
 Route::get('/banners/top-e-side', [BannerController::class, 'getTopAndSideImages']);
 
-Route::get('business-column/{id}', [BusinessColumnController::class, 'show']);
-Route::get('business-columns/{search}', [BusinessColumnController::class, 'index']);
+Route::get('industrial-guide/{id}', [IndustrialGuideController::class, 'show']);
+Route::get('industrial-guides/{search}', [IndustrialGuideController::class, 'index']);
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
 
-class BusinessColumn extends Model
+class IndustrialGuide extends Model
 {
     use HasFactory;
 
@@ -24,7 +24,7 @@ class BusinessColumn extends Model
         return Attribute::make(
             set: function ($value) {
                 if (is_object($value) && method_exists($value, 'store')) {
-                    return $value->store('business_images', 'public');
+                    return $value->store('guide_images', 'public');
                 }
                 return $value;
             },

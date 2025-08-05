@@ -7,19 +7,19 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('business_columns', function (Blueprint $table) {
+        Schema::create('industrial_guides', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('image_url');
-            $table->string('address')->nullable();; // translated from 'endereco'
-            $table->string('number')->nullable();;  // can be street/building number
-            $table->text('description')->nullable(); // translated from 'descricao'
+            $table->string('address')->nullable();
+            $table->string('number')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('business_columns');
+        Schema::dropIfExists('industrial_guides');
     }
 };
