@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\IndustrialGuideService;
 use App\Models\IndustrialGuide;
+use App\Http\Requests\StoreIndustrialGuideResquest;
+use App\Http\Requests\UpdateIndustrialGuideRequest;
 
 class IndustrialGuideController extends Controller
 {
@@ -24,29 +26,9 @@ class IndustrialGuideController extends Controller
         return response()->json($this->service->getAll($search));
     }
 
-    public function store(Request $request)
+    public function store(StoreIndustrialGuideResquest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'image_url' => 'required|file|mimes:jpg,jpeg,png,webp|max:2048',
-            'address' => 'nullable|string',
-            'number' => 'nullable|string',
-            'description' => 'nullable|string',
-        ], [
-            'name.required' => 'O nome é obrigatório.',
-            'name.string' => 'O nome deve ser um texto.',
-            'name.max' => 'O nome não pode ter mais de 255 caracteres.',
-
-            'image_url.required' => 'A imagem é obrigatória.',
-            'image_url.file' => 'A imagem deve ser um arquivo válido.',
-            'image_url.mimes' => 'A imagem deve estar no formato: jpg, jpeg, png ou webp.',
-            'image_url.max' => 'A imagem não pode ter mais de 2MB.',
-
-            'address.string' => 'O endereço deve ser um texto.',
-            'number.string' => 'O número deve ser um texto.',
-            'description.string' => 'A descrição deve ser um texto.',
-        ]);
-
+        $data = $request->validated();
         $newGuide = $this->service->create($data);
         return response()->json($newGuide, 201);
     }
@@ -62,7 +44,7 @@ class IndustrialGuideController extends Controller
         return response()->json($guide);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateIndustrialGuideRequest $request, $id)
     {
         $guide = $this->service->findById($id);
 
@@ -70,17 +52,7 @@ class IndustrialGuideController extends Controller
             return response()->json(['message' => 'Not Found'], 404);
         }
 
-        $data = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'image_url' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
-            'address' => 'sometimes|string',
-            'number' => 'sometimes|string',
-            'description' => 'nullable|string',
-        ]);
-
-        if ($request->hasFile('image_url')) {
-            $data['image_url'] = $request->file('image_url')->store('industrial-guides', 'public');
-        }
+        $data = $request->validated();
 
         $this->service->update($guide, $data);
         return response()->json(['message' => 'Atualizado com sucesso']);
@@ -96,5 +68,19 @@ class IndustrialGuideController extends Controller
 
         $this->service->delete($guide);
         return response()->json(['message' => 'Deletado com sucesso']);
+    }
+
+    public function industrialGuideSector($sectorId, $search)
+    {
+        if ($search === 'null') {
+            $search = null;
+        }
+        if ($sectorId === 'null') {
+            $sectorId = null;
+        }
+
+        $guides = $this->service->industrialGuideSector($sectorId, $search);
+
+        return $guides;
     }
 }

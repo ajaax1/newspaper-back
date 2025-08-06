@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndustrialGuideController;
+use App\Http\Controllers\SectorController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -42,6 +44,11 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('categories', [CategoryController::class, 'store']);
     Route::get('categories', [CategoryController::class, 'panel']);
 
+    Route::put('sectors/{id}', [SectorController::class, 'update']);
+    Route::delete('sectors/{id}', [SectorController::class, 'destroy']);
+    Route::post('sectors', [SectorController::class, 'store']);
+    Route::get('sectors', [SectorController::class, 'panel']);
+
     Route::get('banners', [BannerController::class, 'index']);
     Route::post('banners', [BannerController::class, 'store']);
     Route::delete('banners/{id}', [BannerController::class, 'destroy']);
@@ -58,8 +65,11 @@ Route::get('news-category/{categoryId}/{search?}',[NewsController::class,'newsCa
 Route::get('categories/{id}', [CategoryController::class, 'show']);
 Route::get('categories', [CategoryController::class, 'index']);
 
+Route::get('sectors/{id}', [CategoryController::class, 'show']);
+Route::get('sectors', [SectorController::class, 'index']);
+
 Route::get('/banners/top-e-side', [BannerController::class, 'getTopAndSideImages']);
 
 Route::get('industrial-guide/{id}', [IndustrialGuideController::class, 'show']);
-Route::get('industrial-guides/{search}', [IndustrialGuideController::class, 'index']);
+Route::get('industrial-guides-sector/{sectorId}/{search?}',[IndustrialGuideController::class,'industrialGuideSector']);
 

@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class UpdateIndustrialGuideRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Preparar os dados antes da validação.
+     */
+    public function prepareForValidation()
+    {
+        if (is_string($this->sector_ids) && !empty($this->sector_ids)) {
+            $ids = json_decode($this->sector_ids, true);
+            $this->merge([
+                'sector_ids' => $ids
+            ]);
+        }
+    }
+
+    /**
+     * Regras de validação para atualização.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'name' => 'sometimes|string|max:255',
+            'image_url' => 'sometimes|file|mimes:jpg,jpeg,png,webp|max:2048',
+            'address' => 'nullable|string',
+            'number' => 'nullable|string',
+            'description' => 'nullable|string',
+            'sector_ids' => 'nullable|array',
+            'sector_ids.*' => 'exists:sectors,id',
+        ];
+    }
+
+    /**
+     * Mensagens personalizadas.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.string' => 'O nome deve ser um texto.',
+            'name.max' => 'O nome não pode ter mais de 255 caracteres.',
+
+            'image_url.file' => 'A imagem deve ser um arquivo válido.',
+            'image_url.mimes' => 'A imagem deve estar no formato: jpg, jpeg, png ou webp.',
+            'image_url.max' => 'A imagem não pode ter mais de 2MB.',
+
+            'address.string' => 'O endereço deve ser um texto.',
+            'number.string' => 'O número deve ser um texto.',
+            'description.string' => 'A descrição deve ser um texto.',
+
+            'sector_ids.array' => 'Os setores devem ser enviados como uma lista.',
+            'sector_ids.*.exists' => 'Um ou mais setores selecionados não existem.',
+        ];
+    }
+}
