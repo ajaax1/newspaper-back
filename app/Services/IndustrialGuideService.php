@@ -22,7 +22,13 @@ class IndustrialGuideService
 
     public function findById(int $id)
     {
-        return IndustrialGuide::find($id);
+        $guide = IndustrialGuide::with('sectors')->find($id);
+
+        if (!$guide) {
+            return response()->json(['message' => 'Guia não encontrado.'], 404);
+        }
+
+        return response()->json($guide);
     }
 
     public function create(array $data)
@@ -113,10 +119,24 @@ class IndustrialGuideService
     }
 
 
-    public function delete(IndustrialGuide $industrialGuide)
+    public function delete($id)
     {
+        $industrialGuide = IndustrialGuide::find($id);
+
+        if (!$industrialGuide) {
+            throw new \Exception("IndustrialGuide não encontrado");
+        }
+
+        $path = $industrialGuide->getRawOriginal('image_url');
+
+        if ($path && \Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+        }
+
         return $industrialGuide->delete();
     }
+
+
 
     public function industrialGuideSector($sectorId = null, $search = null)
     {

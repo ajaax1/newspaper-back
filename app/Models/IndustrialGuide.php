@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Sector;
+
 class IndustrialGuide extends Model
 {
     use HasFactory;
@@ -43,6 +44,4 @@ class IndustrialGuide extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-
 }

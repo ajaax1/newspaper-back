@@ -38,15 +38,22 @@ class UserService
             $data['password'] = Hash::make($data['password']);
         }
         $user->update($data);
-        return response()->json(['message'=>'Atualizado com Sucesso'],200);
+        return response()->json(['message' => 'Atualizado com Sucesso'], 200);
     }
 
     public function delete(int $id)
     {
+
+        $authUser = auth()->user();
+
+        if ($authUser && $authUser->id === $id) {
+            return response()->json(['message' => 'Você não pode deletar a si mesmo.'], 403);
+        }
+
         $user = User::find($id);
 
-        if(!$user){
-            return response()->json(['message' => 'User não encontrada.'], 200);
+        if (!$user) {
+            return response()->json(['message' => 'Usuário não encontrado.'], 200);
         }
         $user->delete();
 

@@ -69,20 +69,20 @@ class CategoryController extends Controller
         return $category = $this->categoryService->update($category, $validated);
     }
 
+
     public function destroy(int $id)
     {
         $category = Category::find($id);
 
         if (!$category) {
-            return response()->json(['message' => 'Categoria não encontrada.'], 200);
+            return response()->json(['message' => 'Categoria não encontrada.'], 404);
         }
 
-        if ($category->image) {
-            $path = str_replace('/storage/', '', $category->image);
-            Storage::disk('public')->delete($path);
-        }
+        $banners = Banner::where('category_id', $category->id)->get();
 
-        Banner::where('category_id', $category->id)->update(['category_id' => null]);
+        foreach ($banners as $banner) {
+            $banner->delete();
+        }
 
         return $this->categoryService->delete($category);
     }

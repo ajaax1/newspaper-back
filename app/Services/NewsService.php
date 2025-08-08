@@ -66,7 +66,7 @@ class NewsService
 
 
 
-    public function getAllPanel($search, $category)
+    public function getAllPanel($categoryId, $search)
     {
         $query = News::with(['user', 'categories'])
             ->orderByDesc('created_at');
@@ -78,9 +78,9 @@ class NewsService
             });
         }
 
-        if ($category) {
-            $query->whereHas('categories', function ($q) use ($category) {
-                $q->where('name', $category);
+        if ($categoryId) {
+            $query->whereHas('categories', function ($q) use ($categoryId) {
+                $q->where('categories.id', $categoryId); 
             });
         }
 

@@ -60,13 +60,7 @@ class IndustrialGuideController extends Controller
 
     public function destroy($id)
     {
-        $guide = $this->service->findById($id);
-
-        if (!$guide) {
-            return response()->json(['message' => 'Not Found'], 404);
-        }
-
-        $this->service->delete($guide);
+        $this->service->delete($id);
         return response()->json(['message' => 'Deletado com sucesso']);
     }
 

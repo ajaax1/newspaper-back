@@ -22,11 +22,11 @@ class NewsController extends Controller
         return $this->newsService->getAll();
     }
 
-    public function panel($search, $category)
+    public function panel($categoryId,$search)
     {
         if ($search === 'null') $search = null;
-        if ($category === 'null') $category = null;
-        return $this->newsService->getAllPanel($search, $category);
+        if ($categoryId === 'null') $categoryId = null;
+        return $this->newsService->getAllPanel($categoryId,$search);
     }
 
     public function store(StoreNewsRequest $request)

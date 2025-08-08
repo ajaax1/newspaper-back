@@ -27,7 +27,11 @@ class SectorService
 
     public function find(int $id)
     {
-        return Sector::find($id);
+        $sector = Sector::find($id);
+        if($sector == null){
+            return response()->json(['message' => 'Usuário não encontrado'], 200);
+        }
+        return $sector;
     }
 
     public function update(Sector $sector, array $data)

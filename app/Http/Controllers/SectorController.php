@@ -73,13 +73,6 @@ class SectorController extends Controller
             return response()->json(['message' => 'Setor não encontrado.'], 200);
         }
 
-        if ($sector->image) {
-            $path = str_replace('/storage/', '', $sector->image);
-            Storage::disk('public')->delete($path);
-        }
-
-        Banner::where('category_id', $sector->id)->update(['category_id' => null]);
-
         return $this->sectorService->delete($sector);
     }
 

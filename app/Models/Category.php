@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\News;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Banner;
 class Category extends Model
 {
     use HasFactory;

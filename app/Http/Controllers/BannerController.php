@@ -20,7 +20,7 @@ class BannerController extends Controller
     public function index()
     {
         $banners = $this->bannersService->getAll();
-        return response()->json($banners);
+        return $banners;
     }
     public function getTopAndSideImages()
     {
@@ -52,9 +52,7 @@ class BannerController extends Controller
                 'image_url.max' => 'A imagem não pode ter mais de 2MB.',
             ]
         );
-
-        $banner = $this->bannersService->create($data);
-        return response()->json($banner, 201);
+        return $banner = $this->bannersService->create($data);
     }
 
     public function destroy($id)
@@ -74,5 +72,9 @@ class BannerController extends Controller
         $bannerImage->delete();
 
         return response()->json(['message' => 'Imagem do banner excluída com sucesso.'], 200);
+    }
+
+    public function show(int $id){
+        return $this->bannersService->find($id);
     }
 }
