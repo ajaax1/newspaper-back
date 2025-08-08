@@ -81,6 +81,15 @@ class CategoryController extends Controller
         $banners = Banner::where('category_id', $category->id)->get();
 
         foreach ($banners as $banner) {
+            $images = \App\Models\BannerImages::where('banner_id', $banner->id)->get();
+
+            foreach ($images as $image) {
+                if ($image->image_url) {
+                    $path = str_replace('/storage/', '', $image->image_url);
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+                }
+                $image->delete();
+            }
             $banner->delete();
         }
 

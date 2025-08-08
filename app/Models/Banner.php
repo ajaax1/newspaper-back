@@ -25,22 +25,4 @@ class Banner extends Model
     {
         return $this->belongsTo(Category::class);
     }
-
-    protected static function booted()
-    {
-        static::deleting(function ($banner) {
-            // Garante que a relação esteja carregada
-            $banner->load('bannerImages');
-
-            foreach ($banner->bannerImages as $image) {
-                // Deleta o arquivo do disco
-                if ($image->image_url && Storage::disk('public')->exists($image->image_url)) {
-                    Storage::disk('public')->delete($image->image_url);
-                }
-
-                // Deleta o registro do banco
-                $image->delete();
-            }
-        });
-    }
 }

@@ -9,7 +9,7 @@ use App\Http\Controllers\BannerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndustrialGuideController;
 use App\Http\Controllers\SectorController;
-
+use App\Http\Controllers\MagazineController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,6 +56,10 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('industrial-guide', [IndustrialGuideController::class, 'store']);
     Route::put('industrial-guide/{id}', [IndustrialGuideController::class, 'update']);
     Route::delete('industrial-guide/{id}', [IndustrialGuideController::class, 'destroy']);
+
+    Route::post('magazines', [MagazineController::class, 'store']);
+    Route::put('magazines/{id}', [MagazineController::class, 'update']);
+    Route::delete('magazines/{id}', [MagazineController::class, 'destroy']);
 });
 
 Route::get('news', [NewsController::class, 'index']);
