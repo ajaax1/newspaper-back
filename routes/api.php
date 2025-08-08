@@ -65,7 +65,7 @@ Route::get('news-category/{categoryId}/{search?}',[NewsController::class,'newsCa
 Route::get('categories/{id}', [CategoryController::class, 'show']);
 Route::get('categories', [CategoryController::class, 'index']);
 
-Route::get('sectors/{id}', [CategoryController::class, 'show']);
+Route::get('sectors/{id}', [SectorController::class, 'show']);
 Route::get('sectors', [SectorController::class, 'index']);
 
 Route::get('/banners/top-e-side', [BannerController::class, 'getTopAndSideImages']);
