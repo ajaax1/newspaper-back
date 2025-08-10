@@ -28,7 +28,7 @@ class IndustrialGuideService
             return response()->json(['message' => 'Guia não encontrado.'], 404);
         }
 
-        return response()->json($guide);
+        return $guide;
     }
 
     public function create(array $data)
