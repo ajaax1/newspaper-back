@@ -36,9 +36,9 @@ class NewsController extends Controller
         return response()->json($news, 201);
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        $news = $this->newsService->find($id);
+        $news = $this->newsService->find($slug);
         return $news;
     }
 

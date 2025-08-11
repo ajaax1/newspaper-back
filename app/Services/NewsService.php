@@ -80,7 +80,7 @@ class NewsService
 
         if ($categoryId) {
             $query->whereHas('categories', function ($q) use ($categoryId) {
-                $q->where('categories.id', $categoryId); 
+                $q->where('categories.id', $categoryId);
             });
         }
 
@@ -122,10 +122,12 @@ class NewsService
     }
 
 
-    public function find(int $id)
+    public function find(string $slug)
     {
         try {
-            return News::with(['user', 'categories'])->findOrFail($id);
+            return News::with(['user', 'categories'])
+                ->where('slug', $slug)
+                ->firstOrFail();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'Notícia não encontrada.'], 404);
         }

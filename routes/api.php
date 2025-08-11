@@ -63,7 +63,7 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 });
 
 Route::get('news', [NewsController::class, 'index']);
-Route::get('news/{id}', [NewsController::class, 'show']);
+Route::get('news/{slug}', [NewsController::class, 'show']);
 Route::get('news-category/{categoryId}/{search?}',[NewsController::class,'newsCategory']);
 
 Route::get('categories/{id}', [CategoryController::class, 'show']);
