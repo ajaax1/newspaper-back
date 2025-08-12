@@ -175,14 +175,14 @@ class NewsService
         }
     }
 
-    public function newsCategory($categoryId, $search = null)
+    public function newsCategory($categoryName, $search = null)
     {
         try {
             $perPage = 10;
 
             $news = News::with(['user', 'categories'])
-                ->whereHas('categories', function ($query) use ($categoryId) {
-                    $query->where('categories.id', $categoryId);
+                ->whereHas('categories', function ($query) use ($categoryName) {
+                    $query->where('categories.name', $categoryName);
                 })
                 ->when($search, function ($query) use ($search) {
                     $query->where('title', 'like', '%' . $search . '%');

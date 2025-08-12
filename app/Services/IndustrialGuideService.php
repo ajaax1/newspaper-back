@@ -20,9 +20,9 @@ class IndustrialGuideService
         return $query->paginate(10);
     }
 
-    public function findById(int $id)
+    public function findBySlug(string $slug)
     {
-        $guide = IndustrialGuide::with('sectors')->find($id);
+        $guide = IndustrialGuide::with('sectors')->where('slug', $slug)->first();
 
         if (!$guide) {
             return response()->json(['message' => 'Guia não encontrado.'], 404);
@@ -138,15 +138,15 @@ class IndustrialGuideService
 
 
 
-    public function industrialGuideSector($sectorId = null, $search = null)
+    public function industrialGuideSector($sectorName = null, $search = null)
     {
         try {
             $perPage = 10;
 
             $guides = IndustrialGuide::with(['user', 'sectors'])
-                ->when($sectorId, function ($query) use ($sectorId) {
-                    $query->whereHas('sectors', function ($q) use ($sectorId) {
-                        $q->where('sectors.id', $sectorId);
+                ->when($sectorName, function ($query) use ($sectorName) {
+                    $query->whereHas('sectors', function ($q) use ($sectorName) {
+                        $q->where('sectors.name', $sectorName);
                     });
                 })
                 ->when($search, function ($query) use ($search) {

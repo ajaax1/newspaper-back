@@ -66,6 +66,12 @@ class CategoryController extends Controller
         if (!$category) {
             return response()->json(['message' => 'Categoria não encontrada'], 200);
         }
+
+        $banners = Banner::where('category_id', $category->id)->get();
+        if (!$banners->isEmpty()) {
+            Banner::where('category_id', $category->id)->update(['name' => $validated['name']]);
+        }
+
         return $category = $this->categoryService->update($category, $validated);
     }
 

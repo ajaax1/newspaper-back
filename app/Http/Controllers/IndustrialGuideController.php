@@ -33,9 +33,9 @@ class IndustrialGuideController extends Controller
         return response()->json($newGuide, 201);
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        $guide = $this->service->findById($id);
+        $guide = $this->service->findBySlug($slug);
 
         if (!$guide) {
             return response()->json([], 200);
@@ -46,7 +46,7 @@ class IndustrialGuideController extends Controller
 
     public function update(UpdateIndustrialGuideRequest $request, $id)
     {
-        $guide = $this->service->findById($id);
+        $guide = IndustrialGuide::find($id);
 
         if (!$guide) {
             return response()->json(['message' => 'Not Found'], 404);
@@ -64,16 +64,16 @@ class IndustrialGuideController extends Controller
         return response()->json(['message' => 'Deletado com sucesso']);
     }
 
-    public function industrialGuideSector($sectorId, $search)
+    public function industrialGuideSector($sectorName, $search)
     {
         if ($search === 'null') {
             $search = null;
         }
-        if ($sectorId === 'null') {
-            $sectorId = null;
+        if ($sectorName === 'null') {
+            $sectorName = null;
         }
 
-        $guides = $this->service->industrialGuideSector($sectorId, $search);
+        $guides = $this->service->industrialGuideSector($sectorName, $search);
 
         return $guides;
     }

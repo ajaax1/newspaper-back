@@ -64,16 +64,16 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 
 Route::get('news', [NewsController::class, 'index']);
 Route::get('news/{slug}', [NewsController::class, 'show']);
-Route::get('news-category/{categoryId}/{search?}',[NewsController::class,'newsCategory']);
+Route::get('news-category/{categoryName}/{search?}',[NewsController::class,'newsCategory']);
 
-Route::get('categories/{id}', [CategoryController::class, 'show']);
+//Route::get('categories/{id}', [CategoryController::class, 'show']);
 Route::get('categories', [CategoryController::class, 'index']);
 
-Route::get('sectors/{id}', [SectorController::class, 'show']);
+//Route::get('sectors/{id}', [SectorController::class, 'show']);
 Route::get('sectors', [SectorController::class, 'index']);
 
 Route::get('/banners/top-e-side', [BannerController::class, 'getTopAndSideImages']);
 
-Route::get('industrial-guide/{id}', [IndustrialGuideController::class, 'show']);
-Route::get('industrial-guides-sector/{sectorId}/{search?}',[IndustrialGuideController::class,'industrialGuideSector']);
+Route::get('industrial-guide/{slug}', [IndustrialGuideController::class, 'show']);
+Route::get('industrial-guides-sector/{sectorName}/{search?}',[IndustrialGuideController::class,'industrialGuideSector']);
 
