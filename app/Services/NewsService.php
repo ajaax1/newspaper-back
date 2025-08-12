@@ -93,6 +93,7 @@ class NewsService
 
     public function create(array $data)
     {
+
         try {
             return DB::transaction(function () use ($data) {
                 $slug = Str::slug($data['title']);
@@ -107,6 +108,7 @@ class NewsService
 
                 $data['slug'] = $slug;
                 $data['user_id'] = auth()->id();
+                $data['hours'] = now()->format('H:i:s');
 
                 $news = News::create($data);
 
@@ -142,6 +144,9 @@ class NewsService
             }
             return DB::transaction(function () use ($news, $data) {
                 $data['user_id'] = auth()->id();
+                if(isset($data['status']) && $data['status'] === 'published' && $news->status !== 'published') {
+                    $data['hours'] = now()->format('H:i:s');
+                }
                 $updated = $news->update($data);
                 if (isset($data['category_ids'])) {
                     $news->categories()->sync($data['category_ids']);

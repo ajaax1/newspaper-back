@@ -21,7 +21,8 @@ class News extends Model
         'user_id',
         'top_position',
         'status',
-        'slug'
+        'slug',
+        'hours' 
     ];
 
     // Relacionamento com o autor da notícia
