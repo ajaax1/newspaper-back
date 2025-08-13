@@ -10,8 +10,11 @@ class SocialColumn extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'description',
+       'title',
+        'slug',
+        'hours',
+        'user_id',
+        'description'
     ];
 
     /**

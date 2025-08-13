@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\SocialColumn;
 use App\Models\SocialColumnImage;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class SocialColumnService
 {
@@ -23,6 +25,17 @@ class SocialColumnService
 
     public function create(array $data)
     {
+        $slug = Str::slug($data['title']);
+        $count = 0;
+        $baseSlug = $slug;
+        $data['user_id'] = auth()->id();
+        $data['hours'] = now()->format('H:i:s');
+        while (SocialColumn::where('slug', $slug)->exists()) {
+            $count++;
+            $slug = $baseSlug . '-' . $count;
+        }
+
+        $data['slug'] = $slug;
         $column = SocialColumn::create($data);
         return response()->json($column, 201);
     }

@@ -62,6 +62,12 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('magazines', [MagazineController::class, 'store']);
     Route::put('magazines/{id}', [MagazineController::class, 'update']);
     Route::delete('magazines/{id}', [MagazineController::class, 'destroy']);
+
+    // Imagens das colunas sociais
+    Route::post('/social-columns/images', [SocialColumnController::class, 'storeImage']);
+    Route::delete('/social-columns/images/{id}', [SocialColumnController::class, 'destroyImage']);
+    Route::post('/social-columns', [SocialColumnController::class, 'store']);
+
 });
 
 Route::get('news', [NewsController::class, 'index']);
@@ -80,10 +86,5 @@ Route::get('industrial-guide/{slug}', [IndustrialGuideController::class, 'show']
 Route::get('industrial-guides-sector/{sectorName}/{search?}',[IndustrialGuideController::class,'industrialGuideSector']);
 
 Route::get('/social-columns/{search}', [SocialColumnController::class, 'index']);
-
-Route::post('/social-columns', [SocialColumnController::class, 'store']);
 Route::get('/social-columns/{id}', [SocialColumnController::class, 'show']);
 
-// Imagens das colunas sociais
-Route::post('/social-columns/images', [SocialColumnController::class, 'storeImage']);
-Route::delete('/social-columns/images/{id}', [SocialColumnController::class, 'destroyImage']);
