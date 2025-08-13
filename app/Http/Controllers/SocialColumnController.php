@@ -16,9 +16,12 @@ class SocialColumnController extends Controller
         $this->socialColumnService = $socialColumnService;
     }
 
-    public function index()
+    public function index($search)
     {
-        return $this->socialColumnService->getAll();
+        if($search == 'null'){
+            $search = null;
+        }
+        return $this->socialColumnService->getAll($search);
     }
 
     public function store(Request $request)

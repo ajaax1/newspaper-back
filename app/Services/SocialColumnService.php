@@ -8,10 +8,17 @@ use Illuminate\Support\Facades\Storage;
 
 class SocialColumnService
 {
-    public function getAll()
+    public function getAll($search)
     {
-        $columns = SocialColumn::with('images')->get();
-        return response()->json($columns);
+        $columns = SocialColumn::with('images');
+
+        if ($search) {
+            $columns->where('name', 'like', "%{$search}%");
+        }
+
+        return response()->json(
+            $columns->paginate(10) 
+        );
     }
 
     public function create(array $data)

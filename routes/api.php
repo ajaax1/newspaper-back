@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndustrialGuideController;
 use App\Http\Controllers\SectorController;
 use App\Http\Controllers\MagazineController;
+use App\Http\Controllers\SocialColumnController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -77,3 +79,11 @@ Route::get('/banners/top-e-side', [BannerController::class, 'getTopAndSideImages
 Route::get('industrial-guide/{slug}', [IndustrialGuideController::class, 'show']);
 Route::get('industrial-guides-sector/{sectorName}/{search?}',[IndustrialGuideController::class,'industrialGuideSector']);
 
+Route::get('/social-columns/{search}', [SocialColumnController::class, 'index']);
+
+Route::post('/social-columns', [SocialColumnController::class, 'store']);
+Route::get('/social-columns/{id}', [SocialColumnController::class, 'show']);
+
+// Imagens das colunas sociais
+Route::post('/social-columns/images', [SocialColumnController::class, 'storeImage']);
+Route::delete('/social-columns/images/{id}', [SocialColumnController::class, 'destroyImage']);
