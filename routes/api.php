@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 
     Route::put('sectors/{id}', [SectorController::class, 'update']);
     Route::delete('sectors/{id}', [SectorController::class, 'destroy']);
+    Route::get('sectors/{id}', [SectorController::class, 'show']);
     Route::post('sectors', [SectorController::class, 'store']);
     Route::get('sectors', [SectorController::class, 'panel']);
 
@@ -87,4 +88,3 @@ Route::get('industrial-guides-sector/{sectorName}/{search?}',[IndustrialGuideCon
 
 Route::get('/social-columns/{search}', [SocialColumnController::class, 'index']);
 Route::get('/social-columns/{id}', [SocialColumnController::class, 'show']);
-
