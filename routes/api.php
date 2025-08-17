@@ -64,7 +64,6 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::put('magazines/{id}', [MagazineController::class, 'update']);
     Route::delete('magazines/{id}', [MagazineController::class, 'destroy']);
 
-    // Imagens das colunas sociais
     Route::delete('/social-columns/images/{id}', [SocialColumnController::class, 'destroyImage']);
     Route::post('/social-columns', [SocialColumnController::class, 'store']);
     Route::put('/social-columns/{id}', [SocialColumnController::class, 'update']);
@@ -89,3 +88,7 @@ Route::get('industrial-guides-sector/{sectorName}/{search?}',[IndustrialGuideCon
 
 Route::get('/social-columns/{search}', [SocialColumnController::class, 'index']);
 Route::get('/social-column/{slug}', [SocialColumnController::class, 'show']);
+
+
+Route::get('magazines/{search}', [MagazineController::class, 'index']);
+Route::get('magazine/{slug}', [MagazineController::class, 'show']);

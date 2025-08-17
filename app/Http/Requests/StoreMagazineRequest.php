@@ -25,6 +25,7 @@ class StoreMagazineRequest extends FormRequest
             'title' => 'required|string',
             'file' => 'required|file|mimes:pdf',
             'description' => 'nullable|string',
+            'image_url' => 'required|file|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:2048',
         ];
     }
 
@@ -40,6 +41,10 @@ class StoreMagazineRequest extends FormRequest
             'file.mimes' => 'O arquivo deve estar no formato PDF.',
 
             'description.string' => 'A descrição deve ser um texto válido.',
+            'image_url.required' => 'O campo imagem é obrigatório.',
+            'image_url.file' => 'O arquivo enviado não é válido.',
+            'image_url.mimes' => 'O arquivo deve estar em um formato de imagem válido.',
+            'image_url.max' => 'O arquivo deve ter no máximo 2MB.',
         ];
     }
 }

@@ -17,6 +17,7 @@ class Magazine extends Model
         'title',
         'user_id',
         'description',
+        'image_url'
     ];
 
     protected function file(): Attribute
@@ -25,6 +26,19 @@ class Magazine extends Model
             set: function ($value) {
                 if (is_object($value) && method_exists($value, 'store')) {
                     return $value->store('magazine_files', 'public');
+                }
+                return $value;
+            },
+            get: fn($value) => $value ? Storage::url($value) : null,
+        );
+    }
+
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            set: function ($value) {
+                if (is_object($value) && method_exists($value, 'store')) {
+                    return $value->store('magazines_images', 'public');
                 }
                 return $value;
             },

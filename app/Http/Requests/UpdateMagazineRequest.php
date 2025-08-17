@@ -25,6 +25,7 @@ class UpdateMagazineRequest extends FormRequest
             'title' => 'sometimes|string',
             'file' => 'sometimes|file|mimes:pdf',
             'description' => 'nullable|string',
+            'image_url' => 'sometimes|file|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:2048',
         ];
     }
 
@@ -36,6 +37,9 @@ class UpdateMagazineRequest extends FormRequest
             'file.file' => 'O arquivo enviado não é válido.',
             'file.mimes' => 'O arquivo deve estar no formato PDF.',
             'description.string' => 'A descrição deve ser um texto válido.',
+            'image_url.file' => 'O arquivo enviado não é válido.',
+            'image_url.mimes' => 'O arquivo deve estar em um formato de imagem válido.',
+            'image_url.max' => 'O arquivo deve ter no máximo 2MB.',
         ];
     }
 }

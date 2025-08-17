@@ -17,6 +17,15 @@ class MagazineController extends Controller
         protected MagazineService $magazineService
     ) {}
 
+    public function index(string $search)
+    {
+        if($search == 'null') {
+            $search = null;
+        }
+        $magazines = $this->magazineService->getAll($search);
+        return response()->json($magazines);
+    }
+
     public function store(StoreMagazineRequest $request)
     {
         $validated = $request->validated();
@@ -39,9 +48,9 @@ class MagazineController extends Controller
         return response()->json($magazine, 201);
     }
 
-    public function show(int $id)
+    public function show(string $slug)
     {
-        $magazine = $this->magazineService->find($id);
+        $magazine = $this->magazineService->findBySlug($slug);
         return response()->json($magazine);
     }
 
@@ -69,5 +78,6 @@ class MagazineController extends Controller
     public function destroy(int $id)
     {
         return $this->magazineService->delete($id);
+
     }
 }
