@@ -13,8 +13,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            CategorySeeder::class,
             BannerSeeder::class,
             UserSeeder::class,
+            NewsCategorySeeder::class, // cria 20 news e associa categorias
+
         ]);
     }
 }

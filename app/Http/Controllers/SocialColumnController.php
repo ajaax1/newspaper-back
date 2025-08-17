@@ -18,7 +18,7 @@ class SocialColumnController extends Controller
 
     public function index($search)
     {
-        if($search == 'null'){
+        if ($search == 'null') {
             $search = null;
         }
         return $this->socialColumnService->getAll($search);
@@ -30,24 +30,17 @@ class SocialColumnController extends Controller
             [
                 'title' => 'required|string|max:255',
                 'description' => 'required|string',
+                'images' => 'required|array',
+                'images.*.image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*.is_cover' => 'boolean',
+                'is_cover'    => 'nullable|array',
+                'is_cover.*'  => 'boolean',
             ]
         );
 
         return $this->socialColumnService->create($data);
     }
 
-    public function storeImage(Request $request)
-    {
-        $data = $request->validate(
-            [
-                'social_column_id' => 'required|exists:social_columns,id',
-                'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'is_cover' => 'boolean'
-            ]
-        );
-
-        return $this->socialColumnService->createImage($data);
-    }
 
     public function destroyImage($id)
     {
@@ -68,8 +61,30 @@ class SocialColumnController extends Controller
         return response()->json(['message' => 'Imagem excluída com sucesso.'], 200);
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        return $this->socialColumnService->find($id);
+        return $this->socialColumnService->find($slug);
+    }
+
+    public function destroy($id)
+    {
+        return $this->socialColumnService->destroy($id);
+    }
+
+    public function update($id, Request $request)
+    {
+        $data = $request->validate(
+            [
+                'title' => 'sometimes|required|string|max:255',
+                'description' => 'sometimes|required|string',
+                'images' => 'sometimes|required|array',
+                'images.*.image_url' => 'sometimes|required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*.is_cover' => 'boolean',
+                'is_cover'    => 'nullable|array',
+                'is_cover.*'  => 'boolean',
+            ]
+        );
+
+        return $this->socialColumnService->update($id, $data);
     }
 }

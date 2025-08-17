@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use function Laravel\Prompts\search;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class NewsService
 {
@@ -14,38 +15,45 @@ class NewsService
     {
         $posicoesEsperadas = ['main_top', 'top_1', 'top_2', 'top_3'];
 
+        // Notícias principais
         $noticiasTop = News::whereIn('top_position', $posicoesEsperadas)
             ->where('status', 'published')
             ->orderByRaw("FIELD(top_position, 'main_top', 'top_1', 'top_2', 'top_3')")
             ->get()
             ->keyBy('top_position');
 
+        // Últimas notícias que não estão nas principais
         $ultimasNoticias = News::where('status', 'published')
             ->whereNotIn('id', $noticiasTop->pluck('id'))
             ->orderByDesc('created_at')
             ->get();
 
+        // Monta as notícias principais, preenchendo posições vazias
         $principais = collect($posicoesEsperadas)->map(function ($posicao) use (&$noticiasTop, &$ultimasNoticias) {
             return $noticiasTop->get($posicao) ?? $ultimasNoticias->shift();
         })->filter();
 
         $idsPrincipais = $principais->pluck('id')->toArray();
 
+        // Pega categorias com notícias e banners
         $editorias = Category::with([
             'news' => function ($query) use ($idsPrincipais) {
                 $query->where('status', 'published')
                     ->whereNotIn('news.id', $idsPrincipais)
-                    ->orderByDesc('created_at')
-                    ->take(4);
+                    ->orderByDesc('created_at'); // removido take(4) aqui
             },
             'banners.bannerImages'
         ])->get();
 
-        // Construir JSON final substituindo os banners por array de image_url
+        // Transformar notícias e banners em array final
         $editorias = $editorias->map(function ($categoria) {
-            $data = $categoria->toArray(); // transformar em array
-            $bannerImages = [];
+            $data = $categoria->toArray();
 
+            // Garante 4 notícias por categoria
+            $data['news'] = collect($categoria->news)->take(3)->values();
+
+            // Banner images
+            $bannerImages = [];
             foreach ($categoria->banners as $banner) {
                 foreach ($banner->bannerImages as $image) {
                     if ($image->image_url) {
@@ -53,8 +61,8 @@ class NewsService
                     }
                 }
             }
+            $data['banners'] = $bannerImages;
 
-            $data['banners'] = $bannerImages; // sobrescreve com array de URLs
             return $data;
         });
 
@@ -63,6 +71,7 @@ class NewsService
             'editorias' => $editorias,
         ]);
     }
+
 
 
 
@@ -119,7 +128,10 @@ class NewsService
                 return $news->load('categories');
             });
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Erro ao criar notícia'], 500);
+            return response()->json([
+                'message' => 'Erro ao criar notícia',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -144,7 +156,7 @@ class NewsService
             }
             return DB::transaction(function () use ($news, $data) {
                 $data['user_id'] = auth()->id();
-                if(isset($data['status']) && $data['status'] === 'published' && $news->status !== 'published') {
+                if (isset($data['status']) && $data['status'] === 'published' && $news->status !== 'published') {
                     $data['hours'] = now()->format('H:i:s');
                 }
                 $updated = $news->update($data);
@@ -168,6 +180,11 @@ class NewsService
 
     public function delete(News $news)
     {
+        if ($news->getRawOriginal('image_url')) {
+            Storage::disk('public')->delete($news->getRawOriginal('image_url'));
+        }
+
+        // Agora deleta do banco
         if ($news->delete()) {
             return response()->json(['message' => 'Notícia deletada com sucesso.'], 200);
         } else {

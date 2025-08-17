@@ -22,4 +22,6 @@ class SocialColumnImage extends Model
     {
         return $this->belongsTo(SocialColumn::class);
     }
+
+    
 }
