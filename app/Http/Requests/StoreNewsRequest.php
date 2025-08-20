@@ -36,7 +36,7 @@ class StoreNewsRequest extends FormRequest
             'title' => 'required|string|max:255',
             'sub_title' => 'required|string',
             'content' => 'required|string',
-            'image_url' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:max:2048',
+            'image_url' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:5120',
             'badge' => 'nullable|string|max:30',
             'top_position' => 'nullable|in:main_top,top_1,top_2,top_3',
             'status' => 'required|in:draft,published',

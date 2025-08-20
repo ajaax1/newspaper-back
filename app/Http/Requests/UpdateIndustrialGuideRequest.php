@@ -36,7 +36,7 @@ class UpdateIndustrialGuideRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'image_url' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:max:2048',
+            'image_url' => 'sometimes|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:max:5000',
             'address' => 'nullable|string',
             'number' => 'nullable|string',
             'description' => 'nullable|string',

@@ -33,7 +33,7 @@ class StoreIndustrialGuideResquest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'image_url' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:max:2048',
+            'image_url' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:5120',
             'address' => 'nullable|string',
             'number' => 'nullable|string',
             'description' => 'nullable|string',
@@ -42,7 +42,8 @@ class StoreIndustrialGuideResquest extends FormRequest
         ];
     }
 
-    public function messages(): array{
+    public function messages(): array
+    {
         return [
             'name.required' => 'O nome é obrigatório.',
             'name.string' => 'O nome deve ser um texto.',

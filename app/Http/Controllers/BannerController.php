@@ -42,7 +42,7 @@ class BannerController extends Controller
         $data = $request->validate(
             [
                 'banner_id' => 'required|exists:banners,id',
-                'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'image_url' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:5120',
             ],
             [
                 'banner_id.exists' => 'O banner selecionado é inválido.',
@@ -74,7 +74,8 @@ class BannerController extends Controller
         return response()->json(['message' => 'Imagem do banner excluída com sucesso.'], 200);
     }
 
-    public function show(int $id){
+    public function show(int $id)
+    {
         return $this->bannersService->find($id);
     }
 }

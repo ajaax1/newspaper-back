@@ -35,7 +35,7 @@ class UpdateNewsRequest extends FormRequest
             'title' => 'sometimes|string|max:255',
             'sub_title' => 'sometimes|string',
             'content' => 'sometimes|string',
-            'image_url' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:max:2048',
+            'image_url' => 'sometimes|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:5120',
             'badge' => 'nullable|string|max:30',
             'top_position' => 'nullable|in:main_top,top_1,top_2,top_3',
             'status' => 'sometimes|in:draft,published',

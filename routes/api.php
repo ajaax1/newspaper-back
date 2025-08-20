@@ -11,6 +11,7 @@ use App\Http\Controllers\IndustrialGuideController;
 use App\Http\Controllers\SectorController;
 use App\Http\Controllers\MagazineController;
 use App\Http\Controllers\SocialColumnController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,7 @@ use App\Http\Controllers\SocialColumnController;
 Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+
     Route::post('logout', [AuthController::class, 'logout']);
 
     Route::get('users/{search?}', [UserController::class, 'index']);
@@ -89,6 +91,7 @@ Route::get('industrial-guides-sector/{sectorName}/{search?}',[IndustrialGuideCon
 Route::get('/social-columns/{search}', [SocialColumnController::class, 'index']);
 Route::get('/social-column/{slug}', [SocialColumnController::class, 'show']);
 
-
 Route::get('magazines/{search}', [MagazineController::class, 'index']);
 Route::get('magazine/{slug}', [MagazineController::class, 'show']);
+
+Route::get('home-all', [HomeController::class, 'getAll']);

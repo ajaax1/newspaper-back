@@ -64,6 +64,9 @@ class NewsController extends Controller
         if($search == 'null'){
             $search = null;
         }
+        if($categoryName == 'null'){
+            $categoryName = null;
+        }
         $news = $this->newsService->newsCategory($categoryName,$search);
         return $news;
     }
