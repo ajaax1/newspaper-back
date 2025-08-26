@@ -53,7 +53,6 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('sectors', [SectorController::class, 'store']);
     Route::get('sectors', [SectorController::class, 'panel']);
 
-    Route::get('banners', [BannerController::class, 'index']);
     Route::get('banners/{id}', [BannerController::class, 'show']);
     Route::post('banners', [BannerController::class, 'store']);
     Route::delete('banners/{id}', [BannerController::class, 'destroy']);
@@ -95,3 +94,5 @@ Route::get('magazines/{search}', [MagazineController::class, 'index']);
 Route::get('magazine/{slug}', [MagazineController::class, 'show']);
 
 Route::get('home-all', [HomeController::class, 'getAll']);
+
+    Route::get('banners', [BannerController::class, 'index']);
