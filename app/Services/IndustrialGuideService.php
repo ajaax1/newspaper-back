@@ -16,13 +16,14 @@ class IndustrialGuideService
         if (!empty($search)) {
             $query->where('name', 'like', '%' . $search . '%');
         }
+        $query->with(['sectors', 'user'])->orderBy('created_at', 'desc');
 
         return $query->paginate(10);
     }
 
     public function findBySlug(string $slug)
     {
-        $guide = IndustrialGuide::with('sectors')->where('slug', $slug)->first();
+        $guide = IndustrialGuide::with(['sectors', 'user'])->where('slug', $slug)->first();
 
         if (!$guide) {
             return response()->json(['message' => 'Guia não encontrado.'], 404);

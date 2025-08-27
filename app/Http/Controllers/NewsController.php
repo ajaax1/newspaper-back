@@ -70,4 +70,9 @@ class NewsController extends Controller
         $news = $this->newsService->newsCategory($categoryName,$search);
         return $news;
     }
+
+    public function relatedNews($categoryName)
+    {
+        return $this->newsService->relatedNews($categoryName);
+    }
 }

@@ -12,7 +12,7 @@ class SocialColumnService
 {
     public function getAll($search)
     {
-        $columns = SocialColumn::with('images');
+        $columns = SocialColumn::with(['images', 'user']);
 
         if ($search) {
             $columns->where('title', 'like', "%{$search}%");
@@ -74,7 +74,7 @@ class SocialColumnService
 
     public function find($slug)
     {
-        $column = SocialColumn::with('images')->where('slug', $slug)->first();
+        $column = SocialColumn::with(['images', 'user'])->where('slug', $slug)->first();
 
         if (!$column) {
             return response()->json(['message' => 'Coluna não encontrada.'], 404);

@@ -139,13 +139,33 @@ class NewsService
     public function find(string $slug)
     {
         try {
-            return News::with(['user', 'categories'])
+            $news = News::with(['user', 'categories'])
                 ->where('slug', $slug)
                 ->firstOrFail();
+
+            if ($news->categories->isNotEmpty()) {
+                $randomCategory = $news->categories->random();
+
+                $relatedNews = News::with(['user', 'categories'])
+                    ->whereHas('categories', function ($query) use ($randomCategory) {
+                        $query->where('categories.id', $randomCategory->id);
+                    })
+                    ->where('id', '!=', $news->id)
+                    ->orderBy('created_at', 'desc')
+                    ->take(5)
+                    ->get();
+
+                $news->related_news = $relatedNews;
+            } else {
+                $news->related_news = collect();
+            }
+
+            return $news;
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'Notícia não encontrada.'], 404);
         }
     }
+
 
     public function update($id, array $data)
     {
@@ -212,6 +232,26 @@ class NewsService
             return response()->json($news);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Erro ao buscar notícias.'], 500);
+        }
+    }
+
+    public function relatedNews($categoryName)
+    {
+        try {
+            $perPage = 10;
+
+            $news = News::with(['user', 'categories'])
+                ->when($categoryName, function ($query) use ($categoryName) {
+                    $query->whereHas('categories', function ($q) use ($categoryName) {
+                        $q->where('categories.name', $categoryName);
+                    });
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate($perPage);
+
+            return response()->json($news);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao buscar notícias relacionadas.'], 500);
         }
     }
 }

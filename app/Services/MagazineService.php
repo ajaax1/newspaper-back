@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Magazine;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\MagazineImages;
 class MagazineService
 
 {
@@ -17,15 +17,18 @@ class MagazineService
             $query->where('title', 'like', '%' . $search . '%');
         }
 
+        // Eager load the magazine images
+        $query->with('images');
+
         // ordena antes de paginar
         return $query->orderByDesc('created_at')->paginate(10);
     }
 
     public function findBySlug(string $slug)
     {
-        $magazine = Magazine::where('slug', $slug)->first();
+        $magazine = Magazine::with(['user'])->where('slug', $slug)->first();
         if ($magazine == null) {
-            return response()->json(['message' => 'Revista não encontrada']);
+            return ['message' => 'Revista não encontrada'];
         }
         return $magazine;
     }

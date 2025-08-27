@@ -95,4 +95,5 @@ Route::get('magazine/{slug}', [MagazineController::class, 'show']);
 
 Route::get('home-all', [HomeController::class, 'getAll']);
 
-    Route::get('banners', [BannerController::class, 'index']);
+Route::get('banners', [BannerController::class, 'index']);
+

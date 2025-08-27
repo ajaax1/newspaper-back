@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Http\Requests\StoreMagazineRequest;
 use App\Http\Requests\UpdateMagazineRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Models\MagazineImages;
 
 class MagazineController extends Controller
 {
@@ -19,7 +20,7 @@ class MagazineController extends Controller
 
     public function index(string $search)
     {
-        if($search == 'null') {
+        if ($search == 'null') {
             $search = null;
         }
         $magazines = $this->magazineService->getAll($search);
@@ -44,6 +45,37 @@ class MagazineController extends Controller
         $validated['slug'] = $slug;
 
         $magazine = $this->magazineService->create($validated);
+
+
+        if ($request->hasFile('file')) {
+            $pdf = $request->file('file');
+
+            // Salvar PDF via mutator
+            $magazine->file = $pdf;
+            $magazine->save();
+
+            // Usando Imagick para extrair páginas como imagens
+            $imagick = new \Imagick();
+            $imagick->setResolution(600, 600);
+            $imagick->readImage($pdf->getRealPath());
+
+            foreach ($imagick as $index => $page) {
+                $page->setImageFormat('jpg');
+                $imageName = $magazine->slug . '-page-' . ($index + 1) . '.jpg';
+                $imagePath = 'magazines/images/' . $imageName;
+
+                Storage::put($imagePath, $page);
+
+                // Salvar no banco
+                MagazineImages::create([
+                    'magazine_id' => $magazine->id,
+                    'image_url' => $imagePath,
+                ]);
+            }
+
+            $imagick->clear();
+            $imagick->destroy();
+        }
 
         return response()->json($magazine, 201);
     }
@@ -78,6 +110,5 @@ class MagazineController extends Controller
     public function destroy(int $id)
     {
         return $this->magazineService->delete($id);
-
     }
 }

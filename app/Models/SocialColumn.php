@@ -32,4 +32,12 @@ class SocialColumn extends Model
     {
         return $this->hasOne(SocialColumnImage::class)->where('is_cover', true);
     }
+
+    /**
+     * Usuário que criou a coluna social.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
