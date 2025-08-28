@@ -16,6 +16,9 @@ class BannersService
 
     public function create(array $data)
     {
+        if(!isset($data['link'])){
+            $data['link'] = null;
+        }
         $banner = BannerImages::create([
             'banner_id' => $data['banner_id'],
             'image_url' => $data['image_url'],
