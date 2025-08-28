@@ -43,6 +43,7 @@ class BannerController extends Controller
             [
                 'banner_id' => 'required|exists:banners,id',
                 'image_url' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:5120',
+                'link' => 'nullable|url',
             ],
             [
                 'banner_id.exists' => 'O banner selecionado é inválido.',

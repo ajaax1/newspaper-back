@@ -19,6 +19,7 @@ class BannersService
         $banner = BannerImages::create([
             'banner_id' => $data['banner_id'],
             'image_url' => $data['image_url'],
+            'link' => $data['link'],
         ]);
         return response()->json($banner, 201);
     }

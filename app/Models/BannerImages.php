@@ -16,6 +16,7 @@ class BannerImages extends Model
     protected $fillable = [
         'banner_id',
         'image_url',
+        'link',
     ];
 
 
