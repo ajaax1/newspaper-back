@@ -43,7 +43,7 @@ class BannerController extends Controller
             [
                 'banner_id' => 'required|exists:banners,id',
                 'image_url' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:5120',
-                'link' => 'nullable|url',
+                'link' => 'nullable',
             ],
             [
                 'banner_id.exists' => 'O banner selecionado é inválido.',
@@ -51,6 +51,7 @@ class BannerController extends Controller
                 'image_url.image' => 'O arquivo enviado deve ser uma imagem.',
                 'image_url.mimes' => 'A imagem deve estar nos formatos: jpeg, png, jpg ou gif.',
                 'image_url.max' => 'A imagem não pode ter mais de 2MB.',
+                'link.url' => 'O link deve ser uma URL válida.',
             ]
         );
         return $banner = $this->bannersService->create($data);
