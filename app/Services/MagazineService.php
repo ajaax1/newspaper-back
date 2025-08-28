@@ -17,9 +17,6 @@ class MagazineService
             $query->where('title', 'like', '%' . $search . '%');
         }
 
-        // Eager load the magazine images
-        $query->with('images');
-
         // ordena antes de paginar
         return $query->orderByDesc('created_at')->paginate(10);
     }
