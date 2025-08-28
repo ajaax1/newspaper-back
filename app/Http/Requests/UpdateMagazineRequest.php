@@ -25,7 +25,7 @@ class UpdateMagazineRequest extends FormRequest
             'title' => 'sometimes|string',
             'file' => 'sometimes|file|mimes:pdf',
             'description' => 'nullable|string',
-            'image_url' => 'sometimes|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:307200',
+            'image_url' => 'sometimes|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:5120',
         ];
     }
 

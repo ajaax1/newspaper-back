@@ -18,5 +18,21 @@ class BannerSeeder extends Seeder
         Banner::create([
             'name' => 'side',
         ]);
+
+        Banner::create([
+            'name' => 'home 1',
+        ]);
+
+        Banner::create([
+            'name' => 'home 2',
+        ]);
+
+        Banner::create([
+            'name' => 'home 3',
+        ]);
+
+        Banner::create([
+            'name' => 'pop up',
+        ]);
     }
 }

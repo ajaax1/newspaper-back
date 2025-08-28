@@ -25,7 +25,7 @@ class StoreMagazineRequest extends FormRequest
             'title' => 'required|string',
             'file' => 'required|file|mimes:pdf',
             'description' => 'nullable|string',
-            'image_url' => 'nullable|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:307200',
+            'image_url' => 'required|mimes:jpeg,png,jpg,gif,webp,bmp,svg,tiff,tif,ico,heic,heif|max:5120',
         ];
     }
 
