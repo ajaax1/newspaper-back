@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Sector;
 
+
 class IndustrialGuideService
 {
     public function getAll($search)
@@ -71,13 +72,12 @@ class IndustrialGuideService
         }
     }
 
-
-
     public function update(IndustrialGuide $industrialGuide, array $data)
     {
         try {
             return DB::transaction(function () use ($industrialGuide, $data) {
 
+                // Atualiza slug se necessário
                 if (!empty($data['name']) && $data['name'] !== $industrialGuide->name) {
                     $slug = Str::slug($data['name']);
                     $count = 0;
@@ -103,6 +103,22 @@ class IndustrialGuideService
                 $sectorIds = $data['sector_ids'] ?? null;
                 unset($data['sector_ids']);
 
+                // 🔹 Se houver nova imagem
+                if (isset($data['image_url']) && $data['image_url'] instanceof \Illuminate\Http\UploadedFile) {
+
+                    // Corrige path antigo removendo "/storage/" se existir
+                    $oldImage = $industrialGuide->image_url;
+                    $oldImage = preg_replace('#^/storage/#', '', $oldImage);
+
+                    // Deleta arquivo antigo se existir
+                    if ($oldImage && \Storage::disk('public')->exists($oldImage)) {
+                        \Storage::disk('public')->delete($oldImage);
+                    }
+
+                    // Salva a nova imagem
+                    $data['image_url'] = $data['image_url']->store('guide_images', 'public');
+                }
+
                 $industrialGuide->update($data);
 
                 if (is_array($sectorIds)) {
@@ -118,6 +134,11 @@ class IndustrialGuideService
             ], 500);
         }
     }
+
+
+
+
+
 
 
     public function delete($id)

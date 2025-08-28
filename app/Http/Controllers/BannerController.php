@@ -25,7 +25,7 @@ class BannerController extends Controller
     public function getTopAndSideImages()
     {
         $banners = Banner::with('bannerImages')
-            ->whereIn('id', [1, 2])
+            ->whereIn('id', [1, 2,6])
             ->get();
 
         // Reduzir o resultado para apenas image_url agrupadas por banner ID
