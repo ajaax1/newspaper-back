@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Magazine;
 use Illuminate\Support\Facades\Storage;
 use App\Models\MagazineImages;
+
 class MagazineService
 
 {
@@ -24,11 +25,24 @@ class MagazineService
     public function findBySlug(string $slug)
     {
         $magazine = Magazine::with(['user'])->where('slug', $slug)->first();
+
         if ($magazine == null) {
             return ['message' => 'Revista não encontrada'];
         }
-        return $magazine;
+
+        // Buscar as últimas 5 revistas, exceto a atual
+        $relatedMagazines = Magazine::with(['user'])
+            ->where('id', '!=', $magazine->id)
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        return [
+            'magazine' => $magazine,
+            'related'  => $relatedMagazines
+        ];
     }
+
 
     public function create(array $data)
     {
