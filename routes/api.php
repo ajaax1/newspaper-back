@@ -12,7 +12,7 @@ use App\Http\Controllers\SectorController;
 use App\Http\Controllers\MagazineController;
 use App\Http\Controllers\SocialColumnController;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\ContactController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -97,3 +97,4 @@ Route::get('home-all', [HomeController::class, 'getAll']);
 
 Route::get('banners', [BannerController::class, 'index']);
 
+Route::post('contato', [ContactController::class, 'store']);

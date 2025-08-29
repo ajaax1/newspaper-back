@@ -1,8 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Services\ContactService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Contato;
+use Exception;
 
 class ContactController extends Controller
 {
@@ -20,16 +24,23 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate(
-            [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255',
-                'subject' => 'required|string|max:255',
-                'message' => 'required|string',
-            ]
-        );
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
 
-        return $this->contactService->create($data);
+        try {
+            Mail::to(env('CLIENT_MAIL'))->send(new Contato($data));
+            return response()->json(['message' => 'Email sent successfully'], 200);
+        } catch (Exception $e) {
+            \Log::error('Erro ao enviar e-mail: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Falha ao enviar o e-mail',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function show($id)
